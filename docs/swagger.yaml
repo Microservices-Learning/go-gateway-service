@@ -1,0 +1,96 @@
+basePath: /
+definitions:
+  auth.AuthResponse:
+    properties:
+      email:
+        type: string
+      first_name:
+        type: string
+      last_name:
+        type: string
+      roles:
+        items:
+          type: string
+        type: array
+      user_id:
+        type: string
+      username:
+        type: string
+    type: object
+  auth.LoginRequest:
+    properties:
+      password:
+        type: string
+      username:
+        type: string
+    type: object
+  auth.LoginResponse_Data:
+    properties:
+      access_token:
+        type: string
+      refresh_token:
+        type: string
+      user:
+        $ref: '#/definitions/auth.AuthResponse'
+    type: object
+  model.ErrorResponse:
+    properties:
+      error_code:
+        type: string
+      error_description:
+        type: string
+      errors:
+        additionalProperties:
+          type: string
+        type: object
+      exception:
+        type: string
+    type: object
+host: localhost:8000
+info:
+  contact:
+    email: hoanggg2110@gmail.com
+    name: 'Developer: Hoang Ngo'
+  description: This is a documents for Go Microservices REST API.
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  title: Go Microservices REST API
+  version: "1.0"
+paths:
+  /api/v2/login:
+    post:
+      consumes:
+      - application/json
+      description: Get Access Token and Refresh Token
+      parameters:
+      - description: Login Information
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/auth.LoginRequest'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/auth.LoginResponse_Data'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+      summary: Login
+      tags:
+      - Auth
+schemes:
+- https
+securityDefinitions:
+  Jwt:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"
